@@ -1,0 +1,26 @@
+{
+  "name": "tickets",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "start": "./scripts/start.sh",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.24.0",
+  "devDependencies": {
+    "@biomejs/biome": "2.3.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "concurrently": "^9.2.1",
+    "date-fns": "^4.1.0",
+    "date-fns-tz": "^3.2.0",
+    "dotenv": "^17.2.3",
+    "pino": "^10.1.0",
+    "pino-http": "^11.0.0"
+  }
+}
