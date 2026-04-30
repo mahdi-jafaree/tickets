@@ -1,6 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
-import { Account } from "../entities";
-
+import { getContainer } from "../container";
 import type { SafeAccount } from "../types";
 import TicketError, { BrotherErrorTypes } from "../utils/error";
 import { verifyToken } from "../utils/jwt";
@@ -21,13 +20,12 @@ export async function authenticateToken(
 				"unauthorized_error",
 			);
 		}
+
 		const { accountId } = await verifyToken(token);
 
-		const repo = req.manager.getRepository(Account);
-		const account = await repo.findOne({
-			where: { id: accountId },
-			relations: ["roles.role"],
-		});
+		const container = getContainer().cradle;
+		const accService = container.accountService;
+		const account = await accService.retrieve(accountId);
 
 		if (!account) {
 			throw new TicketError(

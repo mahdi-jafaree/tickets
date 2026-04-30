@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { authRouter } from "./auth";
+import { ticketRouter } from "./ticket";
 
 export function adminRouter(app: Router) {
 	const router = Router();
@@ -7,6 +8,5 @@ export function adminRouter(app: Router) {
 	router.get("/health", (_, res) => res.status(200).json("Admin healthy"));
 
 	authRouter(router);
-
-
+	ticketRouter(router);
 }

@@ -1,9 +1,9 @@
 import type {
-  EntityManager,
-  FindManyOptions,
-  FindOneOptions,
-  FindOptionsWhere,
-  Repository,
+	EntityManager,
+	FindManyOptions,
+	FindOneOptions,
+	FindOptionsWhere,
+	Repository,
 } from "typeorm";
 import { Account } from "../entities";
 

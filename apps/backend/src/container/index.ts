@@ -1,21 +1,27 @@
 import {
-  type AwilixContainer,
-  asClass,
-  asValue,
-  createContainer,
+	type AwilixContainer,
+	asClass,
+	asValue,
+	createContainer,
 } from "awilix";
 import type { EntityManager } from "typeorm";
 import { AuthController } from "../controllers/authController";
+import { TicketController } from "../controllers/ticketController";
 import { AccountRepository } from "../repositories/account.repository";
+import { TicketRepository } from "../repositories/ticket.repository";
+import { AccountService } from "../services/accountService";
 import { AuthService } from "../services/auth";
+import { TicketService } from "../services/ticket";
 
 export interface Cradle {
 	manager: EntityManager;
 	accountRepository: AccountRepository;
+	ticketRepository: TicketRepository;
 	authController: AuthController;
+	ticketController: TicketController;
 	authService: AuthService;
-
-
+	accountService: AccountService;
+	ticketService: TicketService;
 }
 
 export type AppContainer = AwilixContainer<Cradle>;
@@ -35,10 +41,13 @@ export function createAppContainer(manager: EntityManager): AppContainer {
 	container.register({
 		manager: asValue(manager),
 
-    accountRepository: asClass(AccountRepository).singleton(),
-    authController: asClass(AuthController).singleton(),
-    authService: asClass(AuthService).singleton(),
-
+		accountRepository: asClass(AccountRepository).singleton(),
+		ticketRepository: asClass(TicketRepository).singleton(),
+		authController: asClass(AuthController).singleton(),
+		ticketController: asClass(TicketController).singleton(),
+		authService: asClass(AuthService).singleton(),
+		accountService: asClass(AccountService).singleton(),
+		ticketService: asClass(TicketService).singleton(),
 	});
 
 	return container;
