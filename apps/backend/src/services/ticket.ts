@@ -1,3 +1,4 @@
+import { Like } from "typeorm";
 import type { TicketRepository } from "../repositories/ticket.repository";
 import TicketError, { BrotherErrorTypes } from "../utils/error";
 
@@ -36,25 +37,37 @@ export class TicketService {
 		status?: string;
 		priority?: string;
 		assignedTo?: string;
+		search?: string;
+		limit?: number;
+		skip?: number;
 	}) {
-		const where: Record<string, unknown> = {};
+		const baseWhere: Record<string, unknown> = {};
 
 		if (filters?.status) {
-			where.status = filters.status;
+			baseWhere.status = filters.status;
 		}
 
 		if (filters?.priority) {
-			where.priority = filters.priority;
+			baseWhere.priority = filters.priority;
 		}
 
 		if (filters?.assignedTo) {
-			where.assignedTo = { id: filters.assignedTo };
+			baseWhere.assignedTo = { id: filters.assignedTo };
 		}
+
+		const where = filters?.search
+			? [
+					{ ...baseWhere, title: Like(`%${filters.search}%`) },
+					{ ...baseWhere, description: Like(`%${filters.search}%`) },
+				]
+			: baseWhere;
 
 		const [tickets, count] = await this.ticketRepository.find({
 			where,
 			relations: ["assignedTo"],
 			order: { createdAt: "DESC" },
+			take: filters?.limit,
+			skip: filters?.skip,
 		});
 
 		return { tickets, count };

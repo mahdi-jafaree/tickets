@@ -31,12 +31,15 @@ export class TicketController {
 	};
 
 	getAllTickets = async (req: Request, res: Response) => {
-		const { status, priority, assignedTo } = req.query;
+		const { status, priority, assignedTo, search, limit, skip } = req.query;
 
 		const tickets = await this.ticketService.getAllTickets({
 			status: status as string | undefined,
 			priority: priority as string | undefined,
 			assignedTo: assignedTo as string | undefined,
+			search: search as string | undefined,
+			limit: limit ? Number(limit) : undefined,
+			skip: skip ? Number(skip) : undefined,
 		});
 
 		res.status(200).json(tickets);

@@ -7,7 +7,10 @@ import {
 } from "./backendHandler";
 import { isError } from "./isError";
 
-export type AdminApiKeys = Omit<ApiContracts, "login" | "register">;
+export type AdminApiKeys = Omit<
+	ApiContracts,
+	"login" | "register" | "createTicket"
+>;
 export const customerApis: AdminApiKeys = {
 	listTickets: (req) => backendApi.listTickets(req),
 };
@@ -23,6 +26,15 @@ function frontendApiCaller(api: AdminApiKeys, req: NextRequest): CustomerApi {
 			api.listTickets({
 				limit: queryParams.get("limit") ?? "50",
 				skip: queryParams.get("skip") ?? "0",
+				...(queryParams.get("status") && {
+					status: queryParams.get("status") as string,
+				}),
+				...(queryParams.get("priority") && {
+					priority: queryParams.get("priority") as string,
+				}),
+				...(queryParams.get("search") && {
+					search: queryParams.get("search") as string,
+				}),
 			}),
 	};
 }

@@ -17,11 +17,7 @@ export function ticketRouter(router: Router) {
 		ticketController.createTicket,
 	);
 
-	router.get(
-		"/tickets",
-		// authenticateToken,
-		ticketController.getAllTickets,
-	);
+	router.get("/tickets", authenticateToken, ticketController.getAllTickets);
 
 	router.get("/tickets/:id", authenticateToken, ticketController.getTicketById);
 

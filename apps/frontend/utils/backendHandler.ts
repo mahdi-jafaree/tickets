@@ -1,4 +1,10 @@
-import type { LoginInput, RegisterInput, SafeAccount } from "@tickets/backend";
+import type {
+	CreateTicketInput,
+	LoginInput,
+	RegisterInput,
+	SafeAccount,
+} from "@tickets/backend";
+import type { Ticket } from "@tickets/backend/src/entities";
 import axios, { AxiosError } from "axios";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -20,6 +26,7 @@ export type ApiResponse<T, E = { code: string; message: string }> =
 
 export type ApiContracts = {
 	listTickets: (req: GetTicketsReq) => Promise<GetTicketsRes>;
+	createTicket: (req: CreateTicketInput) => Promise<ApiResponse<Ticket>>;
 	login: (
 		req: LoginInput,
 	) => Promise<ApiResponse<{ token: string; account: SafeAccount }>>;
@@ -103,4 +110,5 @@ export const backendApi: ApiContracts = {
 	login: (req) => publicBackendCaller(`auth/login`, "POST", req),
 	register: (req) => publicBackendCaller(`auth/register`, "POST", req),
 	listTickets: (req) => backendCaller(constructUrl("tickets", req), "GET"),
+	createTicket: (req) => backendCaller("tickets", "POST", req),
 };

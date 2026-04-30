@@ -5,7 +5,7 @@ import { constructUrl } from "./url";
 
 export function createClientHandler(options?: {
 	headers?: AxiosRequestHeaders;
-}): Omit<ApiContracts, "register" | "login" | "getSession"> {
+}): Omit<ApiContracts, "register" | "login" | "getSession" | "createTicket"> {
 	return {
 		listTickets: (req) =>
 			callClientApi("GET", constructUrl("tickets", req), undefined, options),
