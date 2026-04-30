@@ -13,6 +13,8 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "incremental": true,
+    "experimentalDecorators": true,
+    "strictPropertyInitialization": false,
     "plugins": [
       {
         "name": "next"
