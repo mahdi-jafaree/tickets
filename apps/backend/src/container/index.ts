@@ -5,6 +5,7 @@ import {
 	createContainer,
 } from "awilix";
 import type { EntityManager } from "typeorm";
+import { AccountController } from "../controllers/accountController";
 import { AuthController } from "../controllers/authController";
 import { TicketController } from "../controllers/ticketController";
 import { AccountRepository } from "../repositories/account.repository";
@@ -17,6 +18,7 @@ export interface Cradle {
 	manager: EntityManager;
 	accountRepository: AccountRepository;
 	ticketRepository: TicketRepository;
+	accountController: AccountController;
 	authController: AuthController;
 	ticketController: TicketController;
 	authService: AuthService;
@@ -43,6 +45,7 @@ export function createAppContainer(manager: EntityManager): AppContainer {
 
 		accountRepository: asClass(AccountRepository).singleton(),
 		ticketRepository: asClass(TicketRepository).singleton(),
+		accountController: asClass(AccountController).singleton(),
 		authController: asClass(AuthController).singleton(),
 		ticketController: asClass(TicketController).singleton(),
 		authService: asClass(AuthService).singleton(),

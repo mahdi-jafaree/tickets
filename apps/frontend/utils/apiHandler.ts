@@ -9,7 +9,12 @@ import { isError } from "./isError";
 
 export type AdminApiKeys = Omit<
 	ApiContracts,
-	"login" | "register" | "createTicket"
+	| "login"
+	| "register"
+	| "createTicket"
+	| "getTicketById"
+	| "updateTicket"
+	| "listAccounts"
 >;
 export const customerApis: AdminApiKeys = {
 	listTickets: (req) => backendApi.listTickets(req),

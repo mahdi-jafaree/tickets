@@ -115,26 +115,29 @@ export default async function DashboardPage({
 										className="group cursor-pointer transition hover:bg-zinc-50 dark:hover:bg-zinc-800/40"
 									>
 										<td className="px-4 py-3.5">
-											<p className="text-sm font-medium text-zinc-900 group-hover:text-indigo-600 dark:text-zinc-50 dark:group-hover:text-indigo-400">
-												{ticket.title}
-											</p>
-											<p className="mt-0.5 line-clamp-1 text-xs text-zinc-500 dark:text-zinc-400">
-												{ticket.description}
-											</p>
-											<div className="mt-1.5 flex items-center gap-2 sm:hidden">
-												<span
-													className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${STATUS_STYLES[ticket.status as TicketStatus] ?? ""}`}
-												>
-													{STATUS_LABEL[ticket.status as TicketStatus] ??
-														ticket.status}
-												</span>
-												<span
-													className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${PRIORITY_STYLES[ticket.priority as TicketPriority] ?? ""}`}
-												>
-													{PRIORITY_LABEL[ticket.priority as TicketPriority] ??
-														ticket.priority}
-												</span>
-											</div>
+											<Link href={`/tickets/${ticket.id}`}>
+												<p className="text-sm font-medium text-zinc-900 group-hover:text-indigo-600 dark:text-zinc-50 dark:group-hover:text-indigo-400">
+													{ticket.title}
+												</p>
+												<p className="mt-0.5 line-clamp-1 text-xs text-zinc-500 dark:text-zinc-400">
+													{ticket.description}
+												</p>
+												<div className="mt-1.5 flex items-center gap-2 sm:hidden">
+													<span
+														className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${STATUS_STYLES[ticket.status as TicketStatus] ?? ""}`}
+													>
+														{STATUS_LABEL[ticket.status as TicketStatus] ??
+															ticket.status}
+													</span>
+													<span
+														className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${PRIORITY_STYLES[ticket.priority as TicketPriority] ?? ""}`}
+													>
+														{PRIORITY_LABEL[
+															ticket.priority as TicketPriority
+														] ?? ticket.priority}
+													</span>
+												</div>
+											</Link>
 										</td>
 										<td className="hidden px-4 py-3.5 sm:table-cell">
 											<span
