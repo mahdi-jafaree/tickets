@@ -4,6 +4,18 @@ import type { SafeAccount } from "../types";
 import TicketError, { BrotherErrorTypes } from "../utils/error";
 import { verifyToken } from "../utils/jwt";
 
+export function requireAdmin(req: Request, res: Response, next: NextFunction) {
+	const isAdmin = req.session?.account?.roles?.some(
+		(r) => r.role?.name === "Admin",
+	);
+
+	if (!isAdmin) {
+		return res.status(403).json({ code: "forbidden", message: "forbidden" });
+	}
+
+	next();
+}
+
 export async function authenticateToken(
 	req: Request,
 	res: Response,

@@ -7,6 +7,7 @@ import { createAppContainer } from "./container";
 import { getDBSource } from "./db/dataSource";
 import { errorHandler } from "./middleware/errorHandler";
 import { adminRouter } from "./routes/";
+import { seedTickets } from "./scripts/seed";
 
 const app = express();
 
@@ -32,6 +33,7 @@ async function bootstrap() {
 	try {
 		const dataSource = await getDBSource();
 		await dataSource.runMigrations();
+		await seedTickets(dataSource.manager);
 		const manager = dataSource.manager;
 
 		createAppContainer(manager);

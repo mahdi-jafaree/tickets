@@ -5,7 +5,7 @@ import type {
 	FindOptionsWhere,
 	Repository,
 } from "typeorm";
-import type { Account } from "../entities";
+import type { Account, TicketPriority, TicketStatus } from "../entities";
 import { Ticket } from "../entities";
 
 export class TicketRepository {
@@ -17,8 +17,8 @@ export class TicketRepository {
 	async create(entity: {
 		title: string;
 		description: string;
-		status: string;
-		priority: string;
+		status: TicketStatus;
+		priority: TicketPriority;
 		assignedTo?: string | null;
 	}) {
 		const ticketData: Partial<Ticket> = {

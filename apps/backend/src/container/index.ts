@@ -9,6 +9,7 @@ import { AccountController } from "../controllers/accountController";
 import { AuthController } from "../controllers/authController";
 import { TicketController } from "../controllers/ticketController";
 import { AccountRepository } from "../repositories/account.repository";
+import { RoleRepository } from "../repositories/role.repository";
 import { TicketRepository } from "../repositories/ticket.repository";
 import { AccountService } from "../services/accountService";
 import { AuthService } from "../services/auth";
@@ -17,6 +18,7 @@ import { TicketService } from "../services/ticket";
 export interface Cradle {
 	manager: EntityManager;
 	accountRepository: AccountRepository;
+	roleRepository: RoleRepository;
 	ticketRepository: TicketRepository;
 	accountController: AccountController;
 	authController: AuthController;
@@ -44,6 +46,7 @@ export function createAppContainer(manager: EntityManager): AppContainer {
 		manager: asValue(manager),
 
 		accountRepository: asClass(AccountRepository).singleton(),
+		roleRepository: asClass(RoleRepository).singleton(),
 		ticketRepository: asClass(TicketRepository).singleton(),
 		accountController: asClass(AccountController).singleton(),
 		authController: asClass(AuthController).singleton(),

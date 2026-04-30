@@ -8,4 +8,15 @@ export class AccountController {
 		const accounts = await this.accountService.listAll();
 		res.status(200).json(accounts);
 	};
+
+	createTechnician = async (req: Request, res: Response) => {
+		const { firstName, lastName, emailAddress, password } = req.body;
+		const account = await this.accountService.createTechnician({
+			firstName,
+			lastName,
+			emailAddress,
+			password,
+		});
+		res.status(201).json(account);
+	};
 }

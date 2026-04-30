@@ -1,6 +1,11 @@
 "use client";
+
 import type { SafeAccount } from "@tickets/backend";
-import type { Ticket } from "@tickets/backend/src/entities";
+import type {
+	Ticket,
+	TicketPriority,
+	TicketStatus,
+} from "@tickets/backend/src/entities";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { updateTicket } from "../../../utils/actions/updateTicket";
@@ -73,7 +78,7 @@ export default function UpdateTicketForm({ ticket, accounts }: Props) {
 				<select
 					id="status"
 					value={status}
-					onChange={(e) => setStatus(e.target.value)}
+					onChange={(e) => setStatus(e.target.value as TicketStatus)}
 					className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 shadow-sm focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
 				>
 					{STATUS_OPTIONS.map((opt) => (
@@ -94,7 +99,7 @@ export default function UpdateTicketForm({ ticket, accounts }: Props) {
 				<select
 					id="priority"
 					value={priority}
-					onChange={(e) => setPriority(e.target.value)}
+					onChange={(e) => setPriority(e.target.value as TicketPriority)}
 					className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 shadow-sm focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
 				>
 					{PRIORITY_OPTIONS.map((opt) => (

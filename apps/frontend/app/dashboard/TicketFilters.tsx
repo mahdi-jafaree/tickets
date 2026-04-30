@@ -1,8 +1,9 @@
 "use client";
 
+import type { TicketStatus } from "@tickets/backend/src/entities";
 import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { STATUS_LABEL, type TicketStatus } from "./ticketConstants";
+import { STATUS_LABEL } from "./ticketConstants";
 
 type Props = {
 	status?: string;

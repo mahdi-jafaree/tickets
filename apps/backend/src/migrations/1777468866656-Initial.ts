@@ -69,6 +69,19 @@ export class Initial1777468866656 implements MigrationInterface {
                 ('Admin', NOW(), NOW()),
                 ('Technician', NOW(), NOW())
         `);
+
+		// Insert admin user and assign Admin role
+		await queryRunner.query(`
+            WITH new_account AS (
+                INSERT INTO "account" ("first_name", "last_name", "email_address", "password", "created_at", "updated_at")
+                VALUES ('Admin', 'User', 'admin@admin.com', '$2b$10$oHuHsGw3QmH5giAK8wfWauIpowSaACY1eYGDfazdj70cGPChsaup6', NOW(), NOW())
+                RETURNING "id"
+            )
+            INSERT INTO "account_role" ("account_id", "role_id", "created_at", "updated_at")
+            SELECT new_account.id, role.id, NOW(), NOW()
+            FROM new_account, role
+            WHERE role.name = 'Admin'
+        `);
 	}
 
 	public async down(queryRunner: QueryRunner): Promise<void> {

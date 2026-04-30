@@ -1,4 +1,5 @@
 import { Like } from "typeorm";
+import type { TicketPriority, TicketStatus } from "../entities";
 import type { TicketRepository } from "../repositories/ticket.repository";
 import TicketError, { BrotherErrorTypes } from "../utils/error";
 
@@ -8,8 +9,8 @@ export class TicketService {
 	async createTicket(data: {
 		title: string;
 		description: string;
-		status: string;
-		priority: string;
+		status: TicketStatus;
+		priority: TicketPriority;
 		assignedTo?: string | null;
 	}) {
 		const ticket = await this.ticketRepository.create(data);

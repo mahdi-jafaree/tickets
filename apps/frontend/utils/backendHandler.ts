@@ -1,4 +1,5 @@
 import type {
+	CreateTechnicianInput,
 	CreateTicketInput,
 	LoginInput,
 	RegisterInput,
@@ -34,6 +35,9 @@ export type ApiContracts = {
 		req: UpdateTicketInput,
 	) => Promise<ApiResponse<Ticket>>;
 	listAccounts: () => Promise<ListAccountsRes>;
+	createTechnician: (
+		req: CreateTechnicianInput,
+	) => Promise<ApiResponse<SafeAccount>>;
 	login: (
 		req: LoginInput,
 	) => Promise<ApiResponse<{ token: string; account: SafeAccount }>>;
@@ -122,4 +126,10 @@ export const backendApi: ApiContracts = {
 	updateTicket: (id, req) =>
 		backendCaller(`tickets/${id}`, "PUT", req as Record<string, unknown>),
 	listAccounts: () => backendCaller("accounts", "GET"),
+	createTechnician: (req) =>
+		backendCaller(
+			"accounts/technicians",
+			"POST",
+			req as Record<string, unknown>,
+		),
 };

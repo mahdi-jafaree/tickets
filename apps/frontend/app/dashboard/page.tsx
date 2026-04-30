@@ -1,6 +1,7 @@
+import type { SafeAccount } from "@tickets/backend";
 import type { Ticket } from "@tickets/backend/src/entities";
 import Link from "next/link";
-import { backendApi } from "../../utils/backendHandler";
+import { backendApi, backendCaller } from "../../utils/backendHandler";
 import { isError } from "../../utils/isError";
 import NewTicketButton from "./NewTicketButton";
 import Pagination from "./Pagination";
@@ -10,8 +11,6 @@ import {
 	PRIORITY_STYLES,
 	STATUS_LABEL,
 	STATUS_STYLES,
-	type TicketPriority,
-	type TicketStatus,
 } from "./ticketConstants";
 
 const PAGE_SIZE = 20;
@@ -40,9 +39,21 @@ export default async function DashboardPage({
 		priority,
 	});
 
+	const sessionResult = await backendCaller<
+		Record<never, never>,
+		{ session: { account: SafeAccount } }
+	>("auth/session", "GET");
+
+	const isAdmin =
+		!isError(sessionResult) &&
+		sessionResult.data.session.account.roles.some(
+			(r) => r.role?.name === "Admin",
+		);
+
 	const tickets: Ticket[] = isError(result) ? [] : result.data.tickets;
 	const count: number = isError(result) ? 0 : result.data.count;
 	const totalPages = Math.max(1, Math.ceil(count / PAGE_SIZE));
+
 	return (
 		<div className="flex min-h-full flex-col bg-zinc-50 dark:bg-zinc-950">
 			<header className="sticky top-0 z-10 border-b border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
@@ -51,6 +62,14 @@ export default async function DashboardPage({
 						Tickets
 					</span>
 					<div className="flex items-center gap-3">
+						{isAdmin && (
+							<Link
+								href="/admin/technicians/new"
+								className="rounded-lg bg-indigo-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-indigo-500"
+							>
+								+ New Technician
+							</Link>
+						)}
 						<div className="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-600 text-xs font-semibold text-white">
 							JD
 						</div>
@@ -124,35 +143,30 @@ export default async function DashboardPage({
 												</p>
 												<div className="mt-1.5 flex items-center gap-2 sm:hidden">
 													<span
-														className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${STATUS_STYLES[ticket.status as TicketStatus] ?? ""}`}
+														className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${STATUS_STYLES[ticket.status]}`}
 													>
-														{STATUS_LABEL[ticket.status as TicketStatus] ??
-															ticket.status}
+														{STATUS_LABEL[ticket.status]}
 													</span>
 													<span
-														className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${PRIORITY_STYLES[ticket.priority as TicketPriority] ?? ""}`}
+														className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${PRIORITY_STYLES[ticket.priority]}`}
 													>
-														{PRIORITY_LABEL[
-															ticket.priority as TicketPriority
-														] ?? ticket.priority}
+														{PRIORITY_LABEL[ticket.priority] ?? ticket.priority}
 													</span>
 												</div>
 											</Link>
 										</td>
 										<td className="hidden px-4 py-3.5 sm:table-cell">
 											<span
-												className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium ${STATUS_STYLES[ticket.status as TicketStatus] ?? ""}`}
+												className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium ${STATUS_STYLES[ticket.status]}`}
 											>
-												{STATUS_LABEL[ticket.status as TicketStatus] ??
-													ticket.status}
+												{STATUS_LABEL[ticket.status]}
 											</span>
 										</td>
 										<td className="hidden px-4 py-3.5 md:table-cell">
 											<span
-												className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium ${PRIORITY_STYLES[ticket.priority as TicketPriority] ?? ""}`}
+												className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium ${PRIORITY_STYLES[ticket.priority]}`}
 											>
-												{PRIORITY_LABEL[ticket.priority as TicketPriority] ??
-													ticket.priority}
+												{PRIORITY_LABEL[ticket.priority] ?? ticket.priority}
 											</span>
 										</td>
 										<td className="hidden px-4 py-3.5 lg:table-cell">

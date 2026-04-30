@@ -14,6 +14,7 @@ export function createClientHandler(options?: {
 	| "getTicketById"
 	| "updateTicket"
 	| "listAccounts"
+	| "createTechnician"
 > {
 	return {
 		listTickets: (req) =>

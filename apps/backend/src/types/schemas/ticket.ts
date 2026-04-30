@@ -3,8 +3,18 @@ import { z } from "zod";
 export const CreateTicketSchema = z.object({
 	title: z.string().min(1, "Title is required").max(255, "Title too long"),
 	description: z.string().min(1, "Description is required"),
-	status: z.string().min(1, "Status is required"),
-	priority: z.string().min(1, "Priority is required"),
+	status: z.union([
+		z.literal("open"),
+		z.literal("in_progress"),
+		z.literal("resolved"),
+		z.literal("closed"),
+	]),
+	priority: z.union([
+		z.literal("low"),
+		z.literal("medium"),
+		z.literal("high"),
+		z.literal("critical"),
+	]),
 	assignedTo: z.uuid("Invalid account ID").optional().nullable(),
 });
 

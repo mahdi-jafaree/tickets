@@ -5,7 +5,7 @@ import type {
 	FindOptionsWhere,
 	Repository,
 } from "typeorm";
-import { Account } from "../entities";
+import { Account, AccountRole } from "../entities";
 
 export class AccountRepository {
 	private readonly repo: Repository<Account>;
@@ -34,5 +34,13 @@ export class AccountRepository {
 
 	async find(options?: FindManyOptions<Account>) {
 		return this.repo.find(options);
+	}
+
+	async assignRole(accountId: string, roleId: string) {
+		const accountRole = this.manager.getRepository(AccountRole).create({
+			account: { id: accountId },
+			role: { id: roleId },
+		});
+		return this.manager.save(accountRole);
 	}
 }

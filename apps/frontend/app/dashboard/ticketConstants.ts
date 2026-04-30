@@ -1,5 +1,7 @@
-export type TicketStatus = "open" | "in_progress" | "resolved" | "closed";
-export type TicketPriority = "low" | "medium" | "high" | "critical";
+import type {
+	TicketPriority,
+	TicketStatus,
+} from "@tickets/backend/src/entities";
 
 export const STATUS_LABEL: Record<TicketStatus, string> = {
 	open: "Open",

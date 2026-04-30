@@ -1,5 +1,9 @@
 import type { SafeAccount } from "@tickets/backend";
-import type { Ticket } from "@tickets/backend/src/entities";
+import type {
+	Ticket,
+	TicketPriority,
+	TicketStatus,
+} from "@tickets/backend/src/entities";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { backendApi } from "../../../utils/backendHandler";
@@ -9,8 +13,6 @@ import {
 	PRIORITY_STYLES,
 	STATUS_LABEL,
 	STATUS_STYLES,
-	type TicketPriority,
-	type TicketStatus,
 } from "../../dashboard/ticketConstants";
 import UpdateTicketForm from "./UpdateTicketForm";
 
@@ -35,15 +37,10 @@ export default async function TicketDetailPage({
 		? []
 		: (accountsRes.data as SafeAccount[]);
 
-	const statusStyle =
-		STATUS_STYLES[ticket.status as TicketStatus] ?? "bg-zinc-100 text-zinc-600";
-	const priorityStyle =
-		PRIORITY_STYLES[ticket.priority as TicketPriority] ??
-		"bg-zinc-100 text-zinc-600";
-	const statusLabel =
-		STATUS_LABEL[ticket.status as TicketStatus] ?? ticket.status;
-	const priorityLabel =
-		PRIORITY_LABEL[ticket.priority as TicketPriority] ?? ticket.priority;
+	const statusStyle = STATUS_STYLES[ticket.status as TicketStatus];
+	const priorityStyle = PRIORITY_STYLES[ticket.priority as TicketPriority];
+	const statusLabel = STATUS_LABEL[ticket.status as TicketStatus];
+	const priorityLabel = PRIORITY_LABEL[ticket.priority as TicketPriority];
 
 	return (
 		<div className="flex min-h-full flex-col bg-zinc-50 dark:bg-zinc-950">

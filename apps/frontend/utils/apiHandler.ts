@@ -15,6 +15,7 @@ export type AdminApiKeys = Omit<
 	| "getTicketById"
 	| "updateTicket"
 	| "listAccounts"
+	| "createTechnician"
 >;
 export const customerApis: AdminApiKeys = {
 	listTickets: (req) => backendApi.listTickets(req),
