@@ -1,13 +1,16 @@
 import bcrypt from "bcrypt";
-import type { AccountRole } from "../entities";
 import type { AccountRepository } from "../repositories/account.repository";
+import type { LoginResponse } from "../types";
 import TicketError, { BrotherErrorTypes } from "../utils/error";
 import { generateToken } from "../utils/jwt";
 
 export class AuthService {
 	constructor(private readonly accountRepository: AccountRepository) {}
 
-	async login(data: { emailAddress: string; password: string }) {
+	async login(data: {
+		emailAddress: string;
+		password: string;
+	}): Promise<LoginResponse> {
 		const { emailAddress, password } = data;
 
 		const account = await this.accountRepository.findOne({
@@ -44,10 +47,10 @@ export class AuthService {
 				id: account.id,
 				firstName: account.firstName,
 				lastName: account.lastName,
-				roles: account.roles.map((r: AccountRole) => ({
-					id: r.role.id,
-					name: r.role.name,
-				})),
+				roles: account.roles,
+				createdAt: account.createdAt,
+				updatedAt: account.updatedAt,
+				emailAddress: account.emailAddress,
 			},
 		};
 	}
@@ -60,7 +63,6 @@ export class AuthService {
 	}) {
 		const { firstName, lastName, emailAddress, password } = data;
 
-		// Check if email already exists
 		const existingAccount = await this.accountRepository.findOneBy({
 			emailAddress,
 		});
@@ -73,10 +75,8 @@ export class AuthService {
 			);
 		}
 
-		// Hash password
 		const hashedPassword = await bcrypt.hash(password, 10);
 
-		// Create account
 		const account = await this.accountRepository.create({
 			firstName,
 			lastName,
@@ -84,7 +84,6 @@ export class AuthService {
 			password: hashedPassword,
 		});
 
-		// Generate token
 		const token = await generateToken({
 			accountId: account.id,
 			email: account.emailAddress,

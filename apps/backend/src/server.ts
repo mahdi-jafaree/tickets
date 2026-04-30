@@ -44,8 +44,8 @@ async function bootstrap() {
 
 		adminRouter(app);
 		app.use(errorHandler);
-		app.listen(3000, async () => {
-			console.log("Server running on http://localhost:3000");
+		app.listen(4001, async () => {
+			console.log("Server running on http://localhost:4001");
 		});
 	} catch (error) {
 		console.log("Failed to start the server: ", error);

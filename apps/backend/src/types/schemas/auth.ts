@@ -1,4 +1,5 @@
 import { z } from "zod";
+import type { SafeAccount } from "../account";
 
 export const VerifyAccountSchema = z.object({
 	code: z.string(),
@@ -19,3 +20,8 @@ export const LoginSchema = z.object({
 export type VerifyAccountInput = z.infer<typeof VerifyAccountSchema>;
 export type RegisterInput = z.infer<typeof RegisterSchema>;
 export type LoginInput = z.infer<typeof LoginSchema>;
+
+export type LoginResponse = {
+	token: string;
+	account: SafeAccount;
+};

@@ -10,7 +10,6 @@ import { validateData } from "../utils/validate";
 export function ticketRouter(router: Router) {
 	const { ticketController } = getContainer().cradle;
 
-	// Create a new ticket
 	router.post(
 		"/tickets",
 		authenticateToken,
@@ -18,13 +17,14 @@ export function ticketRouter(router: Router) {
 		ticketController.createTicket,
 	);
 
-	// Get all tickets (with optional filters)
-	router.get("/tickets", authenticateToken, ticketController.getAllTickets);
+	router.get(
+		"/tickets",
+		// authenticateToken,
+		ticketController.getAllTickets,
+	);
 
-	// Get a single ticket by ID
 	router.get("/tickets/:id", authenticateToken, ticketController.getTicketById);
 
-	// Update a ticket
 	router.put(
 		"/tickets/:id",
 		authenticateToken,
@@ -32,7 +32,6 @@ export function ticketRouter(router: Router) {
 		ticketController.updateTicket,
 	);
 
-	// Delete a ticket (soft delete)
 	router.delete(
 		"/tickets/:id",
 		authenticateToken,

@@ -51,13 +51,13 @@ export class TicketService {
 			where.assignedTo = { id: filters.assignedTo };
 		}
 
-		const tickets = await this.ticketRepository.find({
+		const [tickets, count] = await this.ticketRepository.find({
 			where,
 			relations: ["assignedTo"],
 			order: { createdAt: "DESC" },
 		});
 
-		return tickets;
+		return { tickets, count };
 	}
 
 	async updateTicket(

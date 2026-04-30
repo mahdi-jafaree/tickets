@@ -45,7 +45,7 @@ export class TicketRepository {
 	}
 
 	async find(options?: FindManyOptions<Ticket>) {
-		return this.repo.find(options);
+		return this.repo.findAndCount(options);
 	}
 
 	async update(id: string, data: Partial<Ticket>) {

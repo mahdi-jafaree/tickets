@@ -1,19 +1,26 @@
 "use client";
 
+import type { RegisterInput } from "@tickets/backend";
 import Link from "next/link";
-import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { register } from "../../utils/actions/register";
 
 export default function RegisterPage() {
-	const [name, setName] = useState("");
-	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
-	const [confirmPassword, setConfirmPassword] = useState("");
+	const {
+		handleSubmit: submit,
+		register: registerForm,
+		getValues,
 
-	function handleSubmit(e: React.FormEvent) {
-		e.preventDefault();
-		// TODO: wire up API
+		formState: { isSubmitting, errors },
+	} = useForm<RegisterInput & { confirmPassword: string }>();
+
+	async function handleSubmit(data: RegisterInput) {
+		const result = await register(data);
+		if (result) {
+			alert("Something went wrong");
+		}
 	}
-
+	console.log(errors);
 	return (
 		<div className="flex min-h-full flex-col items-center justify-center bg-zinc-50 px-4 py-16 dark:bg-zinc-950">
 			<div className="w-full max-w-sm">
@@ -33,25 +40,50 @@ export default function RegisterPage() {
 				</div>
 
 				<div className="rounded-2xl border border-zinc-200 bg-white px-8 py-10 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
-					<form onSubmit={handleSubmit} className="flex flex-col gap-5">
+					<form onSubmit={submit(handleSubmit)} className="flex flex-col gap-5">
 						<div className="flex flex-col gap-1.5">
 							<label
 								htmlFor="name"
 								className="text-sm font-medium text-zinc-700 dark:text-zinc-300"
 							>
-								Full name
+								First name
 							</label>
-							<input
-								id="name"
-								name="name"
-								type="text"
-								autoComplete="name"
-								required
-								value={name}
-								onChange={(e) => setName(e.target.value)}
-								className="rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 placeholder-zinc-400 shadow-xs outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50 dark:placeholder-zinc-500"
-								placeholder="Jane Doe"
-							/>
+							{
+								<div className="flex flex-col gap-2">
+									<input
+										{...registerForm("firstName", { required: true })}
+										className="rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 placeholder-zinc-400 shadow-xs outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50 dark:placeholder-zinc-500"
+										placeholder="Jane Doe"
+									/>
+									{errors.firstName?.message && (
+										<span className="text-red-400">
+											{errors.firstName.message}
+										</span>
+									)}
+								</div>
+							}
+						</div>
+						<div className="flex flex-col gap-1.5">
+							<label
+								htmlFor="name"
+								className="text-sm font-medium text-zinc-700 dark:text-zinc-300"
+							>
+								Last name
+							</label>
+							{
+								<div className="flex flex-col gap-2">
+									<input
+										{...registerForm("lastName", { required: true })}
+										className="rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 placeholder-zinc-400 shadow-xs outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50 dark:placeholder-zinc-500"
+										placeholder="Jane Doe"
+									/>
+									{errors.firstName?.message && (
+										<span className="text-red-400">
+											{errors.firstName.message}
+										</span>
+									)}
+								</div>
+							}
 						</div>
 
 						<div className="flex flex-col gap-1.5">
@@ -61,17 +93,22 @@ export default function RegisterPage() {
 							>
 								Email address
 							</label>
-							<input
-								id="email"
-								name="email"
-								type="email"
-								autoComplete="email"
-								required
-								value={email}
-								onChange={(e) => setEmail(e.target.value)}
-								className="rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 placeholder-zinc-400 shadow-xs outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50 dark:placeholder-zinc-500"
-								placeholder="you@example.com"
-							/>
+							{
+								<div className="flex flex-col gap-2">
+									<input
+										id="email"
+										{...registerForm("emailAddress", { required: true })}
+										className="rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 placeholder-zinc-400 shadow-xs outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50 dark:placeholder-zinc-500"
+										placeholder="you@example.com"
+									/>
+
+									{errors.emailAddress?.message && (
+										<span className="text-red-400">
+											{errors.emailAddress.message}
+										</span>
+									)}
+								</div>
+							}
 						</div>
 
 						<div className="flex flex-col gap-1.5">
@@ -81,17 +118,26 @@ export default function RegisterPage() {
 							>
 								Password
 							</label>
-							<input
-								id="password"
-								name="password"
-								type="password"
-								autoComplete="new-password"
-								required
-								value={password}
-								onChange={(e) => setPassword(e.target.value)}
-								className="rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 placeholder-zinc-400 shadow-xs outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50 dark:placeholder-zinc-500"
-								placeholder="••••••••"
-							/>
+							{
+								<div className="flex flex-col gap-2">
+									<input
+										type="password"
+										{...registerForm("password", {
+											required: {
+												value: true,
+												message: "Password is required",
+											},
+										})}
+										className="rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 placeholder-zinc-400 shadow-xs outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50 dark:placeholder-zinc-500"
+										placeholder="••••••••"
+									/>
+									{errors.password?.message && (
+										<span className="text-red-400">
+											{errors.password.message}
+										</span>
+									)}
+								</div>
+							}
 						</div>
 
 						<div className="flex flex-col gap-1.5">
@@ -101,22 +147,35 @@ export default function RegisterPage() {
 							>
 								Confirm password
 							</label>
-							<input
-								id="confirmPassword"
-								name="confirmPassword"
-								type="password"
-								autoComplete="new-password"
-								required
-								value={confirmPassword}
-								onChange={(e) => setConfirmPassword(e.target.value)}
-								className="rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 placeholder-zinc-400 shadow-xs outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50 dark:placeholder-zinc-500"
-								placeholder="••••••••"
-							/>
+							{
+								<div className="flex flex-col gap-2">
+									<input
+										type="password"
+										{...registerForm("confirmPassword", {
+											required: {
+												value: true,
+												message: "Confirm Password is required",
+											},
+											validate: (v) =>
+												v === getValues("password") ||
+												"Password does not match",
+										})}
+										className="rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 placeholder-zinc-400 shadow-xs outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50 dark:placeholder-zinc-500"
+										placeholder="••••••••"
+									/>
+									{errors.confirmPassword?.message && (
+										<span className="text-red-400">
+											{errors.confirmPassword.message}
+										</span>
+									)}
+								</div>
+							}
 						</div>
 
 						<button
+							disabled={isSubmitting}
 							type="submit"
-							className="mt-1 rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-xs transition hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-zinc-900"
+							className="mt-1 disabled:cursor-not-allowed disabled:opacity-35 rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-xs transition hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-zinc-900"
 						>
 							Create account
 						</button>
